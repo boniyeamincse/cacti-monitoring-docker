@@ -1,0 +1,4 @@
+# Configuration files for Cacti, SNMP, etc.
+
+db/
+html/

@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: cacti-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: cacti
+      MYSQL_USER: cactiuser
+      MYSQL_PASSWORD: cactiuser_password
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  cacti:
+    build: .
+    container_name: cacti-monitoring
+    ports:
+      - "80:80"
+    depends_on:
+      - mariadb
+    volumes:
+      - ./html:/var/www/html
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=cactiuser
+      - DB_PASSWORD=cactiuser_password
+      - DB_NAME=cacti
+    restart: always
